@@ -4,7 +4,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/saturnengine/saturn-engine.svg)](https://pkg.go.dev/github.com/saturnengine/saturn-engine)
 [![Go Report Card](https://goreportcard.com/badge/github.com/saturnengine/saturn-engine)](https://goreportcard.com/report/github.com/saturnengine/saturn-engine)
 [![CI](https://github.com/saturnengine/saturn-engine/actions/workflows/ci.yaml/badge.svg)](https://github.com/saturnengine/saturn-engine/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/saturnengine/saturn-engine/graph/badge.svg?token=6A4Y75PXH5)](https://codecov.io/gh/saturnengine/saturn-engine)
+[![codecov](https://codecov.io/gh/saturnengine/saturn-engine/graph/badge.svg?token=U3KYC0UMA7)](https://codecov.io/gh/saturnengine/saturn-engine)
 
 3D Game engine for Go.
 
