@@ -3,16 +3,17 @@ name: Generate Coverage Badge
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   coverage:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
+      # Checkout repository on main branch
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       # Set up Go environment
       - name: Set up Go
@@ -63,12 +64,12 @@ jobs:
           </svg>
           EOF
 
-          # Add or update the badge in README.md
-          if grep -q '!\[coverage\]' README.md; then
-            echo "✅ coverage.svg updated (${COVERAGE}%)"
-          else
+          # Add badge to README.md if not present
+          if ! grep -q '!\[coverage\]' README.md; then
             echo "![coverage](./coverage.svg)" >> README.md
             echo "✅ added badge to README.md"
+          else
+            echo "✅ coverage.svg updated (${COVERAGE}%)"
           fi
 
       # Commit and push the badge if it changed
