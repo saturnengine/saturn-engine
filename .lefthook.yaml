@@ -1,9 +1,0 @@
-pre-commit:
-  parallel: true
-  commands:
-    go-lint:
-      run: staticcheck ./...
-    go-fmt:
-      run: go fmt ./...
-    typos:
-      run: typos
