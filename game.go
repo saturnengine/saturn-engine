@@ -8,7 +8,8 @@ type Game interface {
 	// Update is called every tick (1/60 [s] by default).
 	Update() error
 	// Draw draws the game screen.
-	// Draw is called every frame (typically 1/60[s] for 60Hz display).
+	// Draw is called every frame (1/60 [s] by default), but the actual rate may vary
+	// depending on the display's refresh rate or system performance.
 	Draw() error
 }
 
