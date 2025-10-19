@@ -14,4 +14,4 @@ pre-commit:
     typos:
       run: typos
     nocjk:
-      run: nocjk
+      run: nocjk .
