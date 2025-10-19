@@ -12,61 +12,16 @@ type Game interface {
 	Draw() error
 }
 
-// GameOptions represents options for running a game.
-type gameOptions struct {
-	tps int // ticks per second
-	fps int // frames per second
-}
-
-// defaultGameOptions returns the default game options.
-func defaultGameOptions() *gameOptions {
-	return &gameOptions{
-		tps: 60,
-		fps: 60,
-	}
-}
-
-// gameOption is an interface for applying options to gameOptions.
-type gameOption interface {
-	apply(*gameOptions)
-}
-
-// gameOptionFunc is a function type that implements gameOption.
-type gameOptionFunc func(*gameOptions)
-
-// apply applies the gameOptionFunc to the given gameOptions.
-func (f gameOptionFunc) apply(r *gameOptions) { f(r) }
-
-// WithTPS sets the ticks per second for the game.
-func WithTPS(tps int) gameOption {
-	return gameOptionFunc(func(r *gameOptions) {
-		r.tps = tps
-	})
-}
-
-// WithFPS sets the frames per second for the game.
-func WithFPS(fps int) gameOption {
-	return gameOptionFunc(func(r *gameOptions) {
-		r.fps = fps
-	})
-}
-
 // RunGame runs the given game.
 func RunGame(game Game, opts ...gameOption) (err error) {
 	// Apply options
 	options := defaultGameOptions()
-	for _, opt := range opts {
-		opt.apply(options)
-	}
-	if options.tps <= 0 {
-		err = ErrInvalidTPS
-		return
-	}
-	if options.fps <= 0 {
-		err = ErrInvalidFPS
+	applyGameOptions(options, opts)
+	if err = options.validate(); err != nil {
 		return
 	}
 
+	// Make channels
 	errCh := make(chan error, 2)
 	quit := make(chan struct{})
 
