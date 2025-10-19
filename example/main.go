@@ -20,8 +20,12 @@ func (g *Game) Draw() error {
 
 func main() {
 	g := &Game{}
+	i, err := saturn.NewInstance(g, saturn.WithFPS(60), saturn.WithFPS(120))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	if err := saturn.RunGame(g, saturn.WithTPS(60), saturn.WithFPS(120)); err != nil {
+	if err := i.RunGame(); err != nil {
 		log.Fatal(err)
 	}
 }
