@@ -1,0 +1,45 @@
+name: "Feature Request"
+description: "Suggest a new feature or improvement for the project"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide details about the feature you’d like to see.
+        Fill out the sections below to help us understand your request.
+
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: "Feature Description"
+      description: "A clear description of the feature you'd like to see."
+      placeholder: "Describe the feature here..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: "Use Case"
+      description: "Describe the problem this feature would solve."
+      placeholder: "Explain how this feature would be useful..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_implementation
+    attributes:
+      label: "Proposed Implementation"
+      description: "If you have ideas about implementation, describe them here."
+      placeholder: "Outline possible approaches or technical details..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives_considered
+    attributes:
+      label: "Alternatives Considered"
+      description: "Any alternative solutions or workarounds you've considered."
+      placeholder: "List other approaches you've tried or thought about..."
+    validations:
+      required: false

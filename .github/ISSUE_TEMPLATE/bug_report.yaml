@@ -1,0 +1,79 @@
+name: "🐛 Bug Report"
+description: "Report a reproducible bug or unexpected behavior."
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐞 Describe the Bug
+        Please provide a clear description of the problem you encountered.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+      placeholder: "When calling function X, it crashes with error Y..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔁 To Reproduce
+        Provide steps to reproduce the behavior.
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Call function '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+      placeholder: "Expected the function to return X, but got Y."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧭 Environment
+        Please provide details about your setup.
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: "e.g. Windows 10, macOS 12, Ubuntu 20.04"
+    validations:
+      required: true
+
+  - type: input
+    id: go-version
+    attributes:
+      label: Go version
+      placeholder: "e.g. 1.25.0"
+
+  - type: input
+    id: saturn-engine-version
+    attributes:
+      label: SaturnEngine version
+      placeholder: "e.g. 1.0.0"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context or screenshots about the problem here.
+      placeholder: "Logs, screenshots, or additional notes..."
