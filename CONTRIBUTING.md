@@ -70,3 +70,21 @@ git switch -c feature/my-feature
 ### 4. Merge strategy
 
 Use the "Squash and Merge" option on GitHub to keep the commit history clean.
+
+## Issue Reporting
+
+When reporting issues, please use the provided issue templates to ensure your report includes all necessary information.
+
+- **Bug Reports**: Use the [Bug Report](https://github.com/saturnengine/saturn-engine/issues/new?template=bug_report.yaml) template to describe unexpected behavior, steps to reproduce, and environment details.
+  This helps maintainers quickly reproduce and address the problem.
+
+- **Feature Requests**: Use the [Feature Request](https://github.com/saturnengine/saturn-engine/issues/new?template=feature_request.yaml) template to suggest new functionality or improvements.
+  Please include a clear feature description, the use case, and any proposed implementation ideas.
+
+Before creating a new issue, please:
+
+1. **Search existing issues** to check if the problem or feature request has already been reported.
+2. **Provide as much detail as possible**, including logs, code snippets, or screenshots if applicable.
+3. **Stay concise and focused**, describing one issue per report.
+
+Following these guidelines ensures faster responses and more effective collaboration.
