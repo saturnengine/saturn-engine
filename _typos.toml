@@ -1,0 +1,4 @@
+[files]
+extend-exclude = [
+    "internal/glfw/glfw3_unix.h"
+]
