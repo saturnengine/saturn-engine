@@ -9,17 +9,21 @@ import (
 
 // Instance represents a game instance with its configuration.
 type Instance struct {
-	game    Game
-	options *gameOptions
-	window  glfw.Window
-	closed  bool
+	game           Game
+	options        *gameOptions
+	window         glfw.Window
+	operationQueue chan Operation
+	closed         bool
 }
+
+// instance is a singleton instance of the game.
+var instance *Instance
 
 // NewInstance creates a new game instance with the given game and options.
 //
 // This function locks the current OS thread because GLFW requires
 // all window operations to occur on the same thread (especially on macOS/Cocoa).
-func NewInstance(g Game, opts ...gameOption) (i *Instance, err error) {
+func NewInstance(g Game, opts ...gameOption) (err error) {
 	// Lock only on macOS
 	if runtime.GOOS == "darwin" {
 		runtime.LockOSThread()
@@ -31,16 +35,21 @@ func NewInstance(g Game, opts ...gameOption) (i *Instance, err error) {
 		return
 	}
 
-	i = &Instance{
-		game:    g,
-		options: options,
+	instance = &Instance{
+		game:           g,
+		options:        options,
+		operationQueue: make(chan Operation, 128), // Buffered channel for operations
 	}
 	return
 }
 
 // RunGame runs the game instance.
-func (i *Instance) RunGame() (err error) {
-	i.window, err = glfw.NewWindow(i.options.width, i.options.height, i.options.windowTitle)
+func RunGame() (err error) {
+	if instance == nil {
+		err = ErrInstanceNotCreated
+		return
+	}
+	instance.window, err = glfw.NewWindow(instance.options.width, instance.options.height, instance.options.windowTitle)
 	if err != nil {
 		return
 	}
@@ -50,12 +59,12 @@ func (i *Instance) RunGame() (err error) {
 
 	// Update loop
 	go func() {
-		ticker := time.NewTicker(time.Second / time.Duration(i.options.tps))
+		ticker := time.NewTicker(time.Second / time.Duration(instance.options.tps))
 		defer ticker.Stop()
 		for {
 			select {
 			case <-ticker.C:
-				if err := i.game.Update(); err != nil {
+				if err := instance.game.Update(); err != nil {
 					errCh <- err
 					return
 				}
@@ -67,12 +76,12 @@ func (i *Instance) RunGame() (err error) {
 
 	// Draw loop
 	go func() {
-		ticker := time.NewTicker(time.Second / time.Duration(i.options.fps))
+		ticker := time.NewTicker(time.Second / time.Duration(instance.options.fps))
 		defer ticker.Stop()
 		for {
 			select {
 			case <-ticker.C:
-				if err := i.game.Draw(); err != nil {
+				if err := instance.game.Draw(); err != nil {
 					errCh <- err
 					return
 				}
@@ -86,16 +95,27 @@ func (i *Instance) RunGame() (err error) {
 	for {
 		glfw.PollEvents()
 
-		if i.window.ShouldClose() {
+		// Process all queued operations
+		for {
+			select {
+			case op := <-instance.operationQueue:
+				op()
+			default:
+				// If there are no more operations, break the loop
+				goto DoneQueue
+			}
+		}
+	DoneQueue:
+		if instance.window.ShouldClose() {
 			close(quit)
-			i.Close()
+			Close()
 			return nil
 		}
 
 		select {
 		case err = <-errCh:
 			close(quit)
-			i.Close()
+			Close()
 			return
 		default:
 			time.Sleep(10 * time.Millisecond)
@@ -106,15 +126,15 @@ func (i *Instance) RunGame() (err error) {
 // Close gracefully shuts down the game instance and releases resources.
 //
 // It destroys the GLFW window, terminates GLFW, and unlocks the OS thread.
-func (i *Instance) Close() {
-	if i.closed {
+func Close() {
+	if instance.closed {
 		return
 	}
-	i.closed = true
+	instance.closed = true
 
-	if i.window != nil {
-		glfw.DestroyWindow(i.window)
-		i.window = nil
+	if instance.window != nil {
+		glfw.DestroyWindow(instance.window)
+		instance.window = nil
 	}
 
 	glfw.Terminate()
